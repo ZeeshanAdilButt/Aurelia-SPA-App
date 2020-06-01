@@ -148,7 +148,7 @@ export class applicantForm {
     console.log(result);
 
     this.reset();
-    this.router.navigateToRoute('success');
+    // this.router.navigateToRoute('success');
   }
 
   reset() {
