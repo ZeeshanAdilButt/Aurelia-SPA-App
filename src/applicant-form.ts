@@ -56,42 +56,48 @@ export class applicantForm {
     // this.validationRules = validationRules.initialize('', '');
 
     ValidationRules
-      .ensure('this.applicant.Name').required().minLength(3).withMessage('Title must at least be 3 chars long.')
-      .on(this);
+      .ensure('Name').required().minLength(5).withMessage('Name must at least be 5 chars long.')
+      .ensure('FamilyName').required().minLength(5).withMessage('Family Name must at least be 5 chars long.')
+      .ensure('Address').required().minLength(10).withMessage('Address Name must at least be 10 chars long.')
+      .ensure('CountryOfOrigin').required()
+      .ensure('EmailAddress').required().email()
+      .ensure('Age').required().min(18)
+      .ensure('Hired').required()
+      .on(this.applicant);
 
     // ValidationRules
-    //   .ensure('FamilyName').required()
-    //   .on(this);
+    //   .ensure('FamilyName').required().minLength(5).withMessage('Family Name must at least be 5 chars long.')
+    //   .on(this.applicant);
 
     // ValidationRules
-    //   .ensure('Address').required()
-    //   .on(this);
+    //   .ensure('Address').required().minLength(10).withMessage('Address Name must at least be 10 chars long.')
+    //   .on(this.applicant);
 
     // ValidationRules
     //   .ensure('CountryOfOrigin').required()
-    //   .on(this);
+    //   .on(this.applicant);
 
 
     // ValidationRules
     //   .ensure('EmailAddress').required()
     //   .email()
-    //   .on(this);
+    //   .on(this.applicant);
 
 
     // ValidationRules
     //   .ensure('Age').required()
-    //   .on(this);
+    //   .on(this.applicant);
 
 
     // ValidationRules
     //   .ensure('Hired').required()
-    //   .on(this);
+    //   .on(this.applicant);
 
     this.controller.validateTrigger = validateTrigger.changeOrBlur;
     this.controller.subscribe(event => this.validateWhole());
 
 
-    ol.getObserver(this.applicant.Name, 'Name').subscribe(() => {
+    ol.getObserver(this.applicant, 'Name').subscribe(() => {
       this.validate();
     });
 
@@ -107,7 +113,7 @@ export class applicantForm {
   }
 
   validate() {
-    this.validator.validateObject(this.applicant.Name).then(results => {
+    this.validator.validateObject(this.applicant).then(results => {
       let valid = true;
 
       // results is an array of validation results. Each result has a
