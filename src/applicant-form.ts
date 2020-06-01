@@ -1,3 +1,4 @@
+// import { applicant } from './Types/applicant-validation';
 import { bootstrap } from 'aurelia-bootstrapper';
 import { ApplicantService } from './services/applicant-service';
 import { Router, RouterConfiguration } from 'aurelia-router';
@@ -10,13 +11,19 @@ import { BootstrapFormRenderer } from './resources/bootstrap-form-renderer';
 
 @inject(ApplicantService, ValidationControllerFactory, ValidationRules, Validator, ObserverLocator)
 export class applicantForm {
-  Name: string;
-  FamilyName: string;
-  Address: string;
-  CountryOfOrigin: string;
-  EmailAddress: string;
-  Age: number;
-  Hired: boolean;
+
+  // Name: string;
+  // FamilyName: string;
+  // Address: string;
+  // CountryOfOrigin: string;
+  // EmailAddress: string;
+  // Age: number;
+  // Hired: boolean;
+
+
+  applicant: Applicant;
+
+
   controller: ValidationController = null;
   validationRules: ValidationRules;
   validator: Validator;
@@ -28,13 +35,16 @@ export class applicantForm {
   constructor(private api: ApplicantService, controllerFactory: ValidationControllerFactory,
     validationRules: ValidationRules, validator: Validator, ol: ObserverLocator) {
 
-    this.Name = "";
-    this.FamilyName = "";
-    this.Address = "";
-    this.CountryOfOrigin = "";
-    this.EmailAddress = "";
-    this.Age = 0;
-    this.Hired = false;
+    this.applicant = new Applicant();
+    this.applicant.Name = "";
+    this.applicant.FamilyName = "";
+    this.applicant.Address = "";
+    this.applicant.CountryOfOrigin = "";
+    this.applicant.EmailAddress = "";
+    this.applicant.Age = 0;
+    this.applicant.Hired = false;
+
+
     this.controller = controllerFactory.createForCurrentScope();
     this.controller.addRenderer(new BootstrapFormRenderer());
     this.ol = ol;
@@ -46,41 +56,42 @@ export class applicantForm {
     // this.validationRules = validationRules.initialize('', '');
 
     ValidationRules
-      .ensure('Name').minLength(3).withMessage('Title must at least be 3 chars long.')
+      .ensure('this.applicant.Name').required().minLength(3).withMessage('Title must at least be 3 chars long.')
       .on(this);
 
-    ValidationRules
-      .ensure('FamilyName').required()
-      .on(this);
+    // ValidationRules
+    //   .ensure('FamilyName').required()
+    //   .on(this);
 
-    ValidationRules
-      .ensure('Address').required()
-      .on(this);
+    // ValidationRules
+    //   .ensure('Address').required()
+    //   .on(this);
 
-    ValidationRules
-      .ensure('CountryOfOrigin').required()
-      .on(this);
-
-
-    ValidationRules
-      .ensure('EmailAddress').required()
-      .email()
-      .on(this);
+    // ValidationRules
+    //   .ensure('CountryOfOrigin').required()
+    //   .on(this);
 
 
-    ValidationRules
-      .ensure('Age').required()
-      .on(this);
+    // ValidationRules
+    //   .ensure('EmailAddress').required()
+    //   .email()
+    //   .on(this);
 
 
-    ValidationRules
-      .ensure('Hired').required()
-      .on(this);
+    // ValidationRules
+    //   .ensure('Age').required()
+    //   .on(this);
+
+
+    // ValidationRules
+    //   .ensure('Hired').required()
+    //   .on(this);
 
     this.controller.validateTrigger = validateTrigger.changeOrBlur;
+    this.controller.subscribe(event => this.validateWhole());
 
 
-    ol.getObserver(this.Name, 'Name').subscribe(() => {
+    ol.getObserver(this.applicant.Name, 'Name').subscribe(() => {
       this.validate();
     });
 
@@ -90,8 +101,13 @@ export class applicantForm {
     this.validate();
   }
 
+  private validateWhole() {
+    this.validator.validateObject(this.applicant.Name)
+      .then(results => this.canSave = results.every(result => result.valid));
+  }
+
   validate() {
-    this.validator.validateObject(this.Name).then(results => {
+    this.validator.validateObject(this.applicant.Name).then(results => {
       let valid = true;
 
       // results is an array of validation results. Each result has a
@@ -118,44 +134,49 @@ export class applicantForm {
 
   get canReset() {
 
-    return this.Name.length > 0 || this.FamilyName.length > 0
-      || this.Address.length > 0 || this.CountryOfOrigin.length > 0 || this.EmailAddress.length > 0 || this.Age > 0 || this.Hired != false;
+    return this.applicant.Name.length > 0 || this.applicant.FamilyName.length > 0
+      || this.applicant.Address.length > 0 || this.applicant.CountryOfOrigin.length > 0 || this.applicant.EmailAddress.length > 0 || this.applicant.Age > 0 || this.applicant.Hired != false;
   }
 
   save() {
 
-    console.log(this.Name);
-    console.log(this.FamilyName);
-    console.log(this.Address);
-    console.log(this.CountryOfOrigin);
-    console.log(this.EmailAddress);
-    console.log(+this.Age);
-    console.log(this.Hired);
+    this.validate();
 
-    let applicant = new Applicant();
+    if (!this.canSave)
+      return;
 
-    applicant.Name = this.Name;
-    applicant.FamilyName = this.FamilyName;
-    applicant.Address = this.Address;
-    applicant.CountryOfOrigin = this.CountryOfOrigin;
-    applicant.EmailAddress = this.EmailAddress;
-    applicant.Age = +this.Age;
-    applicant.Hired = this.Hired;
+    console.log(this.applicant.Name);
+    console.log(this.applicant.FamilyName);
+    console.log(this.applicant.Address);
+    console.log(this.applicant.CountryOfOrigin);
+    console.log(this.applicant.EmailAddress);
+    console.log(+this.applicant.Age);
+    console.log(this.applicant.Hired);
 
-    var result = this.api.post(applicant);
+    // let applicant = new Applicant();
+
+    // applicant.Name = this.applicant.Name;
+    // applicant.FamilyName = this.applicant.FamilyName;
+    // applicant.Address = this.applicant.Address;
+    // applicant.CountryOfOrigin = this.applicant.CountryOfOrigin;
+    // applicant.EmailAddress = this.applicant.EmailAddress;
+    // applicant.Age = +this.applicant.Age;
+    // applicant.Hired = this.applicant.Hired;
+
+    var result = this.api.post(this.applicant);
     console.log(result);
 
     this.reset();
   }
 
   reset() {
-    this.Name = "";
-    this.FamilyName = "";
-    this.Address = "";
-    this.CountryOfOrigin = "";
-    this.EmailAddress = "";
-    this.Age = 0;
-    this.Hired = false;
+    this.applicant.Name = "";
+    this.applicant.FamilyName = "";
+    this.applicant.Address = "";
+    this.applicant.CountryOfOrigin = "";
+    this.applicant.EmailAddress = "";
+    this.applicant.Age = 0;
+    this.applicant.Hired = false;
   }
 
 

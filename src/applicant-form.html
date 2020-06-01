@@ -1,6 +1,8 @@
 <template>
 
   <require from="./style.css"></require>
+  <!-- <require from="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"> -->
+
   <div validation-errors.bind="errors">
     <div class="col-md">
       <div clas="row">
@@ -9,7 +11,7 @@
           <form role="form" class="form form-horizontal" submit.delegate="signup()">
             <div class="form-group">
               <label for="email">Name</label>
-              <input type="text" value.bind="Name & validate" placeholder="Name" class="form-control">
+              <input type="text" value.bind="applicant.Name & validate" placeholder="Name" class="form-control">
               <ul if.bind="controller.errors">
                 <li repeat.for="error of controller.errors">
                   ${error.message}
@@ -18,28 +20,30 @@
             </div>
             <div class="form-group">
               <label for="password">Family Name</label>
-              <input type="text" value.bind="FamilyName & validate" placeholder="Family Name" class="form-control">
+              <input type="text" value.bind="applicant.FamilyName & validate" placeholder="Family Name"
+                class="form-control">
             </div>
             <div class="form-group">
               <label for="password">Address</label>
-              <input type="text" value.bind="Address & validate" placeholder="Address" class="form-control">
+              <input type="text" value.bind="applicant.Address & validate" placeholder="Address" class="form-control">
             </div>
             <div class="form-group">
               <label for="password">Country Of Origin</label>
-              <input type="text" value.bind="CountryOfOrigin & validate" placeholder="Country Of Origin"
+              <input type="text" value.bind="applicant.CountryOfOrigin & validate" placeholder="Country Of Origin"
                 class="form-control">
             </div>
             <div class="form-group">
               <label for="password">EmailAddress</label>
-              <input type="text" value.bind="EmailAddress & validate" placeholder="Email Address" class="form-control">
+              <input type="text" value.bind="applicant.EmailAddress & validate" placeholder="Email Address"
+                class="form-control">
             </div>
             <div class="form-group">
               <label for="password">Age</label>
-              <input type="number" value.bind="Age & validate" placeholder="Age" class="form-control">
+              <input type="number" value.bind="applicant.Age & validate" placeholder="Age" class="form-control">
             </div>
             <div class="form-check">
-              <input type="checkbox" value.bind="Hired & validate" class="form-check-input" placeholder="Hired"
-                id="Hired">
+              <input type="checkbox" value.bind="applicant.Hired & validate" class="form-check-input"
+                placeholder="Hired" id="Hired">
               <label for="password">Hired?</label>
 
               <!-- <input type="checkbox" placeholder="Hired" class="form-control"> -->
