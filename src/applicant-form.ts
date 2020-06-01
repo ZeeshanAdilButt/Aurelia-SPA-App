@@ -1,3 +1,4 @@
+import { autoinject } from 'aurelia-framework';
 // import { applicant } from './Types/applicant-validation';
 import { bootstrap } from 'aurelia-bootstrapper';
 import { ApplicantService } from './services/applicant-service';
@@ -10,6 +11,7 @@ import { ValidationControllerFactory, ValidationController, ValidationRules, Val
 import { BootstrapFormRenderer } from './resources/bootstrap-form-renderer';
 
 @inject(ApplicantService, ValidationControllerFactory, ValidationRules, Validator, ObserverLocator)
+@autoinject
 export class applicantForm {
 
   // Name: string;
@@ -29,11 +31,12 @@ export class applicantForm {
   validator: Validator;
   canSave: boolean;
   ol: ObserverLocator;
+  router: Router;
 
   // canSave: boolean;
 
   constructor(private api: ApplicantService, controllerFactory: ValidationControllerFactory,
-    validationRules: ValidationRules, validator: Validator, ol: ObserverLocator) {
+    validationRules: ValidationRules, validator: Validator, ol: ObserverLocator, router: Router) {
 
     this.applicant = new Applicant();
     this.applicant.Name = "";
@@ -44,6 +47,7 @@ export class applicantForm {
     this.applicant.Age = 0;
     this.applicant.Hired = false;
 
+    this.router = router;
 
     this.controller = controllerFactory.createForCurrentScope();
     this.controller.addRenderer(new BootstrapFormRenderer());
@@ -144,6 +148,7 @@ export class applicantForm {
     console.log(result);
 
     this.reset();
+    this.router.navigateToRoute('success');
   }
 
   reset() {
@@ -155,8 +160,6 @@ export class applicantForm {
     this.applicant.Age = 0;
     this.applicant.Hired = false;
   }
-
-
 
 }
 
