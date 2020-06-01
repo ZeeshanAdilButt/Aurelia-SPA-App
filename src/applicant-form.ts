@@ -65,37 +65,8 @@ export class applicantForm {
       .ensure('Hired').required()
       .on(this.applicant);
 
-    // ValidationRules
-    //   .ensure('FamilyName').required().minLength(5).withMessage('Family Name must at least be 5 chars long.')
-    //   .on(this.applicant);
-
-    // ValidationRules
-    //   .ensure('Address').required().minLength(10).withMessage('Address Name must at least be 10 chars long.')
-    //   .on(this.applicant);
-
-    // ValidationRules
-    //   .ensure('CountryOfOrigin').required()
-    //   .on(this.applicant);
-
-
-    // ValidationRules
-    //   .ensure('EmailAddress').required()
-    //   .email()
-    //   .on(this.applicant);
-
-
-    // ValidationRules
-    //   .ensure('Age').required()
-    //   .on(this.applicant);
-
-
-    // ValidationRules
-    //   .ensure('Hired').required()
-    //   .on(this.applicant);
-
     this.controller.validateTrigger = validateTrigger.changeOrBlur;
     this.controller.subscribe(event => this.validateWhole());
-
 
     ol.getObserver(this.applicant, 'Name').subscribe(() => {
       this.validate();
@@ -108,7 +79,7 @@ export class applicantForm {
   }
 
   private validateWhole() {
-    this.validator.validateObject(this.applicant.Name)
+    this.validator.validateObject(this.applicant)
       .then(results => this.canSave = results.every(result => result.valid));
   }
 
